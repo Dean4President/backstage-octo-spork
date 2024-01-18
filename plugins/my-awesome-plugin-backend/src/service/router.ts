@@ -13,7 +13,7 @@ export interface RouterOptions {
 
 export const applyDatabaseMigrations = async (knex: Knex): Promise<void> => {
   const migrationsDir = resolvePackagePath(
-    'plugin-my-awesome-plugin-backend',
+    '@dean/plugin-my-awesome-plugin-backend',
     'migrations',
   );
 
