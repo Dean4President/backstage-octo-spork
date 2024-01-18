@@ -57,6 +57,7 @@ import {
 
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
+import { EntityMyAwesomePluginCard } from '@backstage/plugin-my-awesome-plugin';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -132,9 +133,14 @@ const overviewContent = (
     </Grid>
 
     <Grid item md={4} xs={12}>
-      <EntityLinksCard />
+      <EntityLinksCard variant="gridItem" />
     </Grid>
+
     <Grid item md={8} xs={12}>
+      <EntityMyAwesomePluginCard variant="gridItem" />
+    </Grid>
+
+    <Grid item md={12} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
     </Grid>
   </Grid>
@@ -184,6 +190,10 @@ const websiteEntityPage = (
       {overviewContent}
     </EntityLayout.Route>
 
+    <EntityLayout.Route path="/my-awesome-plugin" title="My awesome plugin">
+      <EntityMyAwesomePluginCard />
+    </EntityLayout.Route>
+
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
     </EntityLayout.Route>
@@ -225,17 +235,17 @@ const defaultEntityPage = (
 );
 
 const componentPage = (
-  <EntitySwitch>
-    <EntitySwitch.Case if={isComponentType('service')}>
-      {serviceEntityPage}
-    </EntitySwitch.Case>
+    <EntitySwitch>
+      <EntitySwitch.Case if={isComponentType('service')}>
+        {serviceEntityPage}
+      </EntitySwitch.Case>
 
-    <EntitySwitch.Case if={isComponentType('website')}>
-      {websiteEntityPage}
-    </EntitySwitch.Case>
+      <EntitySwitch.Case if={isComponentType('website')}>
+        {websiteEntityPage}
+      </EntitySwitch.Case>
 
-    <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
-  </EntitySwitch>
+      <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
+    </EntitySwitch>
 );
 
 const apiPage = (

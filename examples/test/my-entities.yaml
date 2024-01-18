@@ -1,0 +1,9 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: File
+metadata:
+  name: valami
+spec:
+  type: NTFS
+  path: ntfs://path
+  owner: me
