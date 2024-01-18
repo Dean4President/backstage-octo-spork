@@ -1,6 +1,6 @@
 ---
 apiVersion: backstage.io/v1alpha1
-kind: File
+kind: ManagedFile
 metadata:
   name: valami
 spec:
