@@ -11,12 +11,12 @@ import useAsync from 'react-use/lib/useAsync';
 /** @public */
 // type ColumnBreakpoints = Record<Breakpoint, number>;
 
-const GitHubProxyComponent = () => {
+const MyBackendComponent: FC = () => {
     const discoveryApi = useApi(discoveryApiRef);
-    const proxyBackendBaseUrl = discoveryApi.getBaseUrl('proxy');
+    const backendBaseUrl = discoveryApi.getBaseUrl('my-awesome-plugin');
 
     const { value, loading, error } = useAsync(async () => {
-        const response = await fetch(`${await proxyBackendBaseUrl}/github/user`);
+        const response = await fetch(`${await backendBaseUrl}/hello`);
         const data = await response.json();
         console.log(data);
 
@@ -30,7 +30,29 @@ const GitHubProxyComponent = () => {
         return <Alert severity='error'>{error.message}</Alert>
     }
 
-    return <div>Logged in user: <a href={'https://github.com/' + value.login} target='_blank' >{value.login}</a></div>
+    return <div>Hello {value.status}</div>;
+}
+
+const GitHubProxyComponent: FC = () => {
+    const discoveryApi = useApi(discoveryApiRef);
+    const pluginBackendBaseUrl = discoveryApi.getBaseUrl('my-awesome-plugin');
+
+    const { value, loading, error } = useAsync(async () => {
+        const response = await fetch(`${await pluginBackendBaseUrl}/github/user`);
+        const data = await response.json();
+        console.log(data);
+
+        return data;
+    }, []);
+
+    if(loading) {
+        return <Progress />
+    }
+    else if (error) {
+        return <Alert severity='error'>{error.message}</Alert>
+    }
+
+    return <div>Logged in user: <a href={value.html_url} target='_blank' >{'value.login'}</a></div>
 }
 
 export interface EntityOverviewCardProps {
@@ -49,6 +71,7 @@ export const EntityOverviewCard: FC<EntityOverviewCardProps> = ({ variant }) => 
                 You are on EntityPage of { entity.metadata.name }
                 <br />
                 <GitHubProxyComponent />
+                <MyBackendComponent />
             </Typography>
         </InfoCard>
     );

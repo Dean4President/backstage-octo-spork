@@ -56,7 +56,7 @@ integrations:
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
-  # endpoints:
+  endpoints:
   #   '/test':
   #     target: 'https://example.com'
   #     changeOrigin: true
@@ -64,10 +64,10 @@ proxy:
   #     allowedHeaders: ['Authorization']
   #     headers:
   #       Authorization: ${SENTRY_TOKEN}
-  '/github':
-    target: https://api.github.com
-    headers:
-      Authorization: 'token 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'
+    '/github':
+      target: https://api.github.com
+      headers:
+        Authorization: 'token ${GITHUB_TOKEN}'
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs

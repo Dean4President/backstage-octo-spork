@@ -4,6 +4,7 @@ import express from 'express';
 import Router from 'express-promise-router';
 import { Knex } from 'knex';
 import { Logger } from 'winston';
+import { exampleUsers } from './constants';
 
 export interface RouterOptions {
   logger: Logger;
@@ -36,7 +37,7 @@ export const createRouter = async (options: RouterOptions): Promise<express.Rout
 
   router.get('/hello', (_, response) => {
     logger.info('Get hello request');
-    response.send({status: 'word'});
+    response.send({status: 'world'});
   });
 
   router.get('/config/:configId', (request, response) => {
@@ -55,6 +56,20 @@ export const createRouter = async (options: RouterOptions): Promise<express.Rout
     logger.info(returnValue);
     
     response.send({ response: returnValue });
+  });
+
+  router.get('/users', (_, response) => {
+    logger.info('Get users from list');
+    response.send({ users: exampleUsers });
+  });
+
+  router.get('/github/user', async (_, response) => {
+    const backendBaseUrl = config.getString('backend.baseUrl');
+    
+    const proxyResponse = await fetch(`${backendBaseUrl}/api/proxy/github/user`);
+    const data = await proxyResponse.json();
+
+    return response.send(data);
   });
 
   router.use(errorHandler());
