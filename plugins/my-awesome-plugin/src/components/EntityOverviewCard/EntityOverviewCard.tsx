@@ -30,10 +30,32 @@ const MyBackendComponent: FC = () => {
         return <Alert severity='error'>{error.message}</Alert>
     }
 
-    return <div>Hello {value.status}</div>;
+    return <div>(Backend) Hello {value.status}!</div>;
 }
 
 const GitHubProxyComponent: FC = () => {
+    const discoveryApi = useApi(discoveryApiRef);
+    const proxyBackendBaseUrl = discoveryApi.getBaseUrl('proxy');
+
+    const { value, loading, error } = useAsync(async () => {
+        const response = await fetch(`${await proxyBackendBaseUrl}/github/user`);
+        const data = await response.json();
+        console.log(data);
+
+        return data;
+    }, []);
+
+    if(loading) {
+        return <Progress />
+    }
+    else if (error) {
+        return <Alert severity='error'>{error.message}</Alert>
+    }
+
+    return <div>(Proxy) Logged in user: <a href={value.html_url} target='_blank' >{value.login}</a></div>
+}
+
+const GitHubBackendToProxyComponent: FC = () => {
     const discoveryApi = useApi(discoveryApiRef);
     const pluginBackendBaseUrl = discoveryApi.getBaseUrl('my-awesome-plugin');
 
@@ -52,7 +74,7 @@ const GitHubProxyComponent: FC = () => {
         return <Alert severity='error'>{error.message}</Alert>
     }
 
-    return <div>Logged in user: <a href={value.html_url} target='_blank' >{'value.login'}</a></div>
+    return <div>(BackendToProxy) Logged in user: <a href={value.html_url} target='_blank' >{value.login}</a></div>
 }
 
 export interface EntityOverviewCardProps {
@@ -68,10 +90,11 @@ export const EntityOverviewCard: FC<EntityOverviewCardProps> = ({ variant }) => 
             <Typography variant='body1'>
                 Hello from my awesome plugin
                 <br />
-                You are on EntityPage of { entity.metadata.name }
+                (Entity) You are on EntityPage of { entity.metadata.name }
                 <br />
-                <GitHubProxyComponent />
                 <MyBackendComponent />
+                <GitHubProxyComponent />
+                <GitHubBackendToProxyComponent />
             </Typography>
         </InfoCard>
     );
